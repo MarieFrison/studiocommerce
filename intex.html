@@ -1,0 +1,754 @@
+<title>Studio de la vente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Serif+Display:ital@0;1&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an "atelier" — a hero band that carries the universe (rap studio / slam stage), then the 9-step stepper beside one writing panel; stacks on phones. */
+:root{
+  /* neutral (before choosing) */
+  --n-bg:#F2F3F1; --n-surface:#FFFFFF; --n-sunk:#E8EAE6; --n-fg:#1A1F1D; --n-muted:#5B635F; --n-line:#D3D7D2; --n-hero:#1A1F1D; --n-hero-fg:#F2F3F1; --n-hero-accent:#F2F3F1;
+  /* rap: studio, concrete + black + signal yellow */
+  --r-bg:#ECEAE5; --r-surface:#FFFFFF; --r-sunk:#E2DFD8; --r-fg:#141414; --r-muted:#5E5A52; --r-line:#CFCBC2; --r-accent:#F2B705; --r-on:#141414; --r-soft:#FBEFC4; --r-hero:#141414; --r-hero-fg:#F4F1EA;
+  /* slam: stage, paper + ink + spotlight */
+  --s-bg:#F7F6F3; --s-surface:#FFFFFF; --s-sunk:#ECEAE5; --s-fg:#111111; --s-muted:#5A5853; --s-line:#D6D3CC; --s-accent:#111111; --s-on:#FFFFFF; --s-soft:#ECEAE5; --s-hero:#0D0D0D; --s-hero-fg:#F3F0E8; --s-spot:#E8D9B0; --s-rule:#C9C5BC;
+  --ok:#2E6B46; --ok-soft:#DDEDE2; --warn:#8A5A00; --warn-soft:#F5EACF;
+  --f-sans:'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --f-mono:'IBM Plex Mono', ui-monospace, 'Courier New', monospace;
+  --f-rap:'Anton', Impact, 'Arial Narrow', sans-serif;
+  --f-slam:'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --f-type:'Courier Prime', 'Courier New', monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --n-bg:#141816; --n-surface:#1C211F; --n-sunk:#252B28; --n-fg:#E9ECE9; --n-muted:#A3ABA6; --n-line:#343B37; --n-hero:#0E1210; --n-hero-fg:#E9ECE9; --n-hero-accent:#E9ECE9;
+    --r-bg:#121212; --r-surface:#1B1B1B; --r-sunk:#262626; --r-fg:#F1EEE6; --r-muted:#A9A398; --r-line:#363431; --r-accent:#F2B705; --r-on:#141414; --r-soft:#3A3010; --r-hero:#0A0A0A; --r-hero-fg:#F4F1EA;
+    --s-bg:#0F0F0F; --s-surface:#191919; --s-sunk:#242424; --s-fg:#F0EDE6; --s-muted:#A6A39C; --s-line:#333333; --s-accent:#F0EDE6; --s-on:#111111; --s-soft:#262420; --s-hero:#050505; --s-hero-fg:#F3F0E8; --s-spot:#E8D9B0; --s-rule:#2E2E2E;
+    --ok:#7CC796; --ok-soft:#1F3328; --warn:#E3B55A; --warn-soft:#3A2F17;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --n-bg:#141816; --n-surface:#1C211F; --n-sunk:#252B28; --n-fg:#E9ECE9; --n-muted:#A3ABA6; --n-line:#343B37; --n-hero:#0E1210; --n-hero-fg:#E9ECE9; --n-hero-accent:#E9ECE9;
+  --r-bg:#121212; --r-surface:#1B1B1B; --r-sunk:#262626; --r-fg:#F1EEE6; --r-muted:#A9A398; --r-line:#363431; --r-accent:#F2B705; --r-on:#141414; --r-soft:#3A3010; --r-hero:#0A0A0A; --r-hero-fg:#F4F1EA;
+  --s-bg:#0F0F0F; --s-surface:#191919; --s-sunk:#242424; --s-fg:#F0EDE6; --s-muted:#A6A39C; --s-line:#333333; --s-accent:#F0EDE6; --s-on:#111111; --s-soft:#262420; --s-hero:#050505; --s-hero-fg:#F3F0E8; --s-spot:#E8D9B0; --s-rule:#2E2E2E;
+  --ok:#7CC796; --ok-soft:#1F3328; --warn:#E3B55A; --warn-soft:#3A2F17;
+  color-scheme:dark;
+}
+body{
+  --bg:var(--n-bg); --surface:var(--n-surface); --sunk:var(--n-sunk); --fg:var(--n-fg); --muted:var(--n-muted); --line:var(--n-line);
+  --accent:var(--n-fg); --on-accent:var(--n-surface); --accent-soft:var(--n-sunk);
+  --hero:var(--n-hero); --hero-fg:var(--n-hero-fg); --hero-accent:var(--n-hero-accent);
+  --f-display:var(--f-sans); --f-body:var(--f-sans); --f-lyrics:var(--f-sans);
+}
+body.mode-rap{
+  --bg:var(--r-bg); --surface:var(--r-surface); --sunk:var(--r-sunk); --fg:var(--r-fg); --muted:var(--r-muted); --line:var(--r-line);
+  --accent:var(--r-accent); --on-accent:var(--r-on); --accent-soft:var(--r-soft);
+  --hero:var(--r-hero); --hero-fg:var(--r-hero-fg); --hero-accent:var(--r-accent);
+  --f-display:var(--f-rap); --f-lyrics:var(--f-sans);
+}
+body.mode-slam{
+  --bg:var(--s-bg); --surface:var(--s-surface); --sunk:var(--s-sunk); --fg:var(--s-fg); --muted:var(--s-muted); --line:var(--s-line);
+  --accent:var(--s-accent); --on-accent:var(--s-on); --accent-soft:var(--s-soft);
+  --hero:var(--s-hero); --hero-fg:var(--s-hero-fg); --hero-accent:var(--s-spot);
+  --f-display:var(--f-slam); --f-lyrics:var(--f-type);
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--fg); font-family:var(--f-body); font-size:16px; line-height:1.5; margin:0}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:20px; padding-block:24px 56px; display:flex; flex-direction:column; gap:22px}
+h1,h2,h3{font-family:var(--f-display); text-wrap:balance; margin:0; line-height:1.1}
+button,input,select,textarea{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+.eyebrow{font-family:var(--f-mono); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+
+/* Hero band: carries the universe */
+.hero{position:relative; overflow:hidden; border-radius:16px; background:var(--hero); color:var(--hero-fg); padding:clamp(22px,4vw,38px); display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:18px 28px; min-height:210px}
+.mode-slam .hero{background:radial-gradient(ellipse 30% 130% at 61% -20%, rgba(232,217,176,.30), rgba(232,217,176,0) 70%), var(--hero)}
+.hero-main{position:relative; z-index:1; display:flex; flex-direction:column; gap:8px; max-width:600px; min-width:0}
+.hero .eyebrow{color:var(--hero-fg); opacity:.75}
+.hero h1{font-size:clamp(36px,6vw,60px); font-weight:700; letter-spacing:-.01em; line-height:1}
+.hero h1 em{font-style:normal; color:var(--hero-accent)}
+.mode-rap .hero h1{font-weight:400; text-transform:uppercase; letter-spacing:.01em; font-size:clamp(42px,7vw,76px); line-height:.95}
+.mode-slam .hero h1{font-weight:400; font-size:clamp(40px,6.4vw,66px)}
+.mode-slam .hero h1 em{font-style:italic}
+.hero p{margin:0; opacity:.85; max-width:52ch}
+.mode-slam .hero p{font-family:var(--f-type); font-size:16.5px}
+.deco{position:absolute; inset:0; pointer-events:none; display:none}
+.mode-rap .deco-rap, .mode-slam .deco-slam{display:block}
+.deco svg{position:absolute}
+.deco-rap svg{right:-70px; top:-60px; width:340px; height:340px}
+.deco-slam svg{right:300px; top:0; width:300px; height:100%}
+@media (max-width:980px){ .deco-slam svg{right:-40px; opacity:.5} }
+@media (max-width:640px){ .deco-rap svg{right:-140px; opacity:.6} .deco-slam svg{display:none} }
+.save-state{font-family:var(--f-mono); font-size:12.5px; color:var(--hero-fg); opacity:.75}
+.top-side{position:relative; z-index:1; display:flex; flex-direction:column; align-items:flex-end; gap:8px}
+@media (max-width:560px){ .top-side{align-items:flex-start} }
+.switch{display:flex; align-items:center; gap:4px; padding:4px; border:1.5px solid var(--hero-fg); border-radius:99px; background:var(--hero)}
+.switch-lbl{font-size:14px; font-weight:600; padding:0 8px 0 10px}
+.sw{min-height:40px; min-width:76px; padding:6px 16px; border:0; border-radius:99px; background:transparent; color:var(--hero-fg); cursor:pointer; font-weight:600; font-size:15px}
+.sw:hover{background:rgba(255,255,255,.12)}
+.sw.rap{font-family:var(--f-rap); font-weight:400; text-transform:uppercase; letter-spacing:.04em; font-size:17px}
+.sw.slam{font-family:var(--f-slam); font-weight:400; font-size:18px}
+.sw.rap[aria-pressed="true"]{background:var(--r-accent); color:var(--r-on)}
+.sw.slam[aria-pressed="true"]{background:var(--s-hero-fg); color:#111111}
+
+/* Choice cards: each previews its universe */
+.choice .pick{align-self:flex-start; margin-top:6px; display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:8px 16px; border-radius:8px; font-family:var(--f-sans); font-weight:600; font-size:15px}
+.choice.rap{background:var(--r-hero); color:var(--r-hero-fg); border-color:var(--r-hero)}
+.choice.rap h3{font-family:var(--f-rap); font-weight:400; text-transform:uppercase; letter-spacing:.01em; font-size:28px; line-height:1}
+.choice.rap p, .choice.rap .meta{color:var(--r-hero-fg); opacity:.8}
+.choice.rap .ico{color:var(--r-accent)}
+.choice.rap .pick{background:transparent; color:var(--r-accent); border:1.5px solid var(--r-accent)}
+.choice.rap[aria-pressed="true"]{background:var(--r-hero); box-shadow:0 0 0 3px var(--r-accent)}
+.choice.rap[aria-pressed="true"] .pick, .choice.rap:hover .pick{background:var(--r-accent); color:var(--r-on)}
+.choice.slam{background:var(--s-surface); color:var(--s-fg); border-color:var(--s-fg)}
+.choice.slam h3{font-family:var(--f-slam); font-weight:400; font-size:28px; line-height:1.05; text-transform:none}
+.choice.slam p{color:var(--s-muted); font-family:var(--f-type)}
+.choice.slam .meta{color:var(--s-muted)}
+.choice.slam .ico{color:var(--s-fg)}
+.choice.slam .pick{background:transparent; color:var(--s-fg); border:1.5px solid var(--s-fg)}
+.choice.slam[aria-pressed="true"]{background:var(--s-surface); box-shadow:0 0 0 3px var(--s-fg)}
+.choice.slam[aria-pressed="true"] .pick, .choice.slam:hover .pick{background:var(--s-fg); color:var(--s-surface)}
+
+/* Universe details in the workspace */
+.panel-head h2{font-weight:700}
+.mode-rap .panel-head h2{font-weight:400; text-transform:uppercase; letter-spacing:.01em; font-size:clamp(32px,4.4vw,44px)}
+.mode-slam .panel-head h2{font-weight:400; font-size:clamp(30px,4.2vw,42px)}
+.mode-rap .dot{border-radius:5px}
+.mode-rap .chip{border-radius:6px}
+.mode-rap .steps button[aria-current="step"]{background:var(--r-hero); color:var(--r-hero-fg); box-shadow:none}
+.mode-rap .steps button[aria-current="step"] .dot{background:var(--r-accent); border-color:var(--r-accent); color:var(--r-on)}
+.mode-slam .steps button[aria-current="step"]{background:var(--surface); box-shadow:inset 0 0 0 1.5px var(--fg)}
+.mode-slam .steps .grp{font-family:var(--f-type); font-size:13px; letter-spacing:.04em}
+.mode-slam textarea.lyrics{background-color:var(--surface); background-image:repeating-linear-gradient(to bottom, transparent 0, transparent 29px, var(--s-rule) 29px, var(--s-rule) 30px); background-attachment:local; line-height:30px; padding-top:6px}
+.mode-rap textarea.lyrics{border-width:2px}
+
+/* Shell */
+.shell{display:grid; grid-template-columns:270px minmax(0,1fr); gap:24px; align-items:start}
+@media (max-width:820px){ .shell{grid-template-columns:minmax(0,1fr)} }
+
+/* Stepper */
+.nav{position:sticky; top:calc(env(safe-area-inset-top,0px) + 16px); display:flex; flex-direction:column; gap:14px}
+.progress{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; display:flex; flex-direction:column; gap:8px}
+.progress .bar{height:8px; background:var(--sunk); border-radius:99px; overflow:hidden}
+.progress .bar i{display:block; height:100%; width:0; background:var(--accent); transition:width .3s ease}
+.progress .lbl{display:flex; justify-content:space-between; font-size:14px}
+.progress .lbl b{font-variant-numeric:tabular-nums}
+.steps{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px}
+.steps .grp{font-family:var(--f-mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); padding:10px 10px 4px}
+.steps button{width:100%; display:flex; align-items:center; gap:10px; padding:8px 10px; min-height:40px; border:0; background:transparent; border-radius:8px; text-align:left; cursor:pointer; font-size:15px}
+.steps button:hover{background:var(--sunk)}
+.steps button[aria-current="step"]{background:var(--surface); box-shadow:inset 0 0 0 1.5px var(--accent); font-weight:600}
+.steps button:disabled{opacity:.45; cursor:not-allowed}
+.dot{flex-shrink:0; width:24px; height:24px; border-radius:50%; border:1.5px solid var(--line); display:grid; place-items:center; font-family:var(--f-mono); font-size:11.5px; color:var(--muted); background:var(--surface)}
+.dot.part{border-color:var(--warn); color:var(--warn); background:var(--warn-soft)}
+.dot.done{border-color:var(--ok); background:var(--ok); color:var(--surface)}
+@media (max-width:820px){
+  .nav{position:static}
+  .steps{flex-direction:row; overflow-x:auto; gap:4px; padding-bottom:4px}
+  .steps .grp{display:none}
+  .steps li{flex-shrink:0}
+  .steps button{width:auto}
+  .steps button .name{display:none}
+  .steps button[aria-current="step"] .name{display:inline}
+}
+
+/* Panel */
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:clamp(18px,3vw,32px); display:flex; flex-direction:column; gap:20px; min-width:0}
+.panel-head{display:flex; flex-direction:column; gap:6px}
+.panel-head h2{font-size:clamp(26px,3.6vw,34px); font-weight:800}
+.panel-head .role{color:var(--muted); max-width:62ch; margin:0}
+.tag{display:inline-flex; align-items:center; gap:8px; align-self:flex-start; font-family:var(--f-mono); font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--on-accent); background:var(--accent); padding:5px 11px; border-radius:99px}
+.mode-rap .tag{border-radius:4px; font-weight:500}
+.mode-slam .tag{font-family:var(--f-type); text-transform:none; letter-spacing:.02em; font-size:14px}
+
+/* Choice cards */
+.choices{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media (max-width:560px){ .choices{grid-template-columns:minmax(0,1fr)} }
+.choice{position:relative; display:flex; flex-direction:column; gap:8px; padding:18px; border:1.5px solid var(--line); border-radius:12px; background:var(--surface); cursor:pointer; text-align:left; min-height:44px}
+.choice:hover{border-color:var(--muted)}
+.choice h3{font-size:22px; font-weight:800}
+.choice p{margin:0; color:var(--muted); font-size:15px}
+.choice .meta{font-family:var(--f-mono); font-size:12.5px; color:var(--muted)}
+.choice .ico{width:40px; height:40px}
+
+/* Fields */
+.grid2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 18px}
+@media (max-width:560px){ .grid2{grid-template-columns:minmax(0,1fr)} }
+.field{display:flex; flex-direction:column; gap:6px; min-width:0}
+.field.full{grid-column:1/-1}
+label, .lab{font-weight:600; font-size:14.5px}
+.hint{font-size:13.5px; color:var(--muted); font-weight:400}
+input[type=text], select, textarea{width:100%; background:var(--bg); border:1.5px solid var(--line); border-radius:8px; padding:10px 12px; min-height:44px}
+input[type=text]:focus, select:focus, textarea:focus{border-color:var(--accent); outline:none; box-shadow:0 0 0 3px var(--accent-soft)}
+textarea{resize:vertical; line-height:1.75; min-height:190px; font-size:17px}
+.mode-slam textarea.lyrics{font-family:var(--f-type); font-size:17px}
+.counter{display:flex; gap:14px; flex-wrap:wrap; font-family:var(--f-mono); font-size:12.5px; color:var(--muted)}
+
+/* Keywords */
+.kw{display:flex; flex-direction:column; gap:8px}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{display:inline-flex; align-items:center; gap:6px; min-height:36px; padding:6px 12px; border-radius:99px; border:1.5px solid var(--line); background:var(--surface); cursor:pointer; font-size:14.5px}
+.chip:hover{border-color:var(--accent)}
+.chip.used{background:var(--ok-soft); border-color:var(--ok); color:var(--fg)}
+.chip svg{width:14px; height:14px}
+.chip:not(.used) svg.ck{display:none}
+.chip.used svg.plus{display:none}
+
+/* Aside cards */
+.cards{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media (max-width:640px){ .cards{grid-template-columns:minmax(0,1fr)} }
+.note{border-radius:10px; padding:14px 16px; background:var(--sunk); display:flex; flex-direction:column; gap:6px; font-size:15px; min-width:0}
+.note .eyebrow{color:var(--muted)}
+.example{border:1.5px dashed var(--accent); background:var(--accent-soft); border-radius:10px; padding:16px 18px; display:flex; flex-direction:column; gap:8px}
+.example blockquote{margin:0; font-size:16.5px; line-height:1.65; white-space:pre-line; font-style:italic}
+.mode-slam .example blockquote{font-family:var(--f-type); font-style:normal; font-size:16.5px}
+.mode-rap .example{border-style:solid; background:var(--r-hero); color:var(--r-hero-fg); border-color:var(--r-hero)}
+.mode-rap .example .eyebrow{color:var(--r-accent)}
+.mode-rap .example .why{color:var(--r-hero-fg); opacity:.75}
+.mode-slam .example{border-style:solid; border-color:var(--fg); background:var(--surface)}
+.example .why{font-size:14px; color:var(--muted)}
+details.tools summary{cursor:pointer; font-weight:600; min-height:32px}
+.tools-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:10px}
+@media (max-width:560px){ .tools-grid{grid-template-columns:minmax(0,1fr)} }
+.tools-grid div{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:14.5px}
+.tools-grid b{display:block}
+.tools-grid i{font-family:var(--f-mono); font-size:13.5px; color:var(--muted)}
+
+/* Nav buttons */
+.actions{display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; border-top:1px solid var(--line); padding-top:18px}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:10px 18px; border-radius:8px; border:1.5px solid var(--fg); background:transparent; cursor:pointer; font-weight:600}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+.mode-rap .btn{border-radius:4px}
+.mode-rap .btn.primary{border-color:var(--fg)}
+.btn:disabled{opacity:.4; cursor:not-allowed}
+.btn.ghost{border-color:var(--line)}
+.btn svg{width:18px; height:18px}
+
+/* Final */
+.checks{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+@media (max-width:640px){ .checks{grid-template-columns:minmax(0,1fr)} }
+.check{display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border-radius:10px; border:1px solid var(--line); background:var(--bg); font-size:15px}
+.check .st{flex-shrink:0; width:24px; height:24px; border-radius:50%; display:grid; place-items:center; border:1.5px solid var(--line)}
+.check.ok .st{background:var(--ok); border-color:var(--ok); color:var(--surface)}
+.check.ko .st{border-color:var(--warn); color:var(--warn)}
+.check small{display:block; color:var(--muted); font-size:13px}
+.check input{width:22px; height:22px; margin:1px 0 0; accent-color:var(--accent); flex-shrink:0}
+.preview{border:1px solid var(--line); border-radius:10px; background:var(--bg); padding:18px 20px; max-height:520px; overflow:auto}
+.preview pre{margin:0; white-space:pre-wrap; word-wrap:break-word; font-family:var(--f-body); font-size:15.5px; line-height:1.65}
+.mode-slam .preview pre{font-family:var(--f-type); font-size:15.5px}
+.toast{min-height:22px; font-size:14px; color:var(--ok)}
+.toast.err{color:var(--warn)}
+.confirm{display:flex; flex-wrap:wrap; gap:10px; align-items:center; padding:12px 14px; border-radius:10px; background:var(--warn-soft); font-size:15px}
+.savebox{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; display:flex; flex-direction:column; gap:8px}
+.savebox .btn{width:100%}
+.btn.sm{min-height:42px; padding:8px 14px; font-size:15px}
+.savemsg{font-size:13.5px; min-height:0; color:var(--ok)}
+.savemsg:empty{display:none}
+.savemsg.err{color:var(--warn)}
+.vh{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+label.btn{cursor:pointer}
+#loadFile:focus-visible + .savemsg, label.btn:focus-within{outline:3px solid var(--accent)}
+.resume{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; padding:12px 16px; border-radius:10px; background:var(--sunk); font-size:15px}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+
+<div class="wrap" id="app">
+  <header class="hero">
+    <div class="deco deco-rap" aria-hidden="true">
+      <svg viewBox="0 0 340 340">
+        <circle cx="170" cy="170" r="168" fill="#1E1E1E"></circle>
+        <circle cx="170" cy="170" r="150" fill="none" stroke="#2C2C2C" stroke-width="2"></circle>
+        <circle cx="170" cy="170" r="132" fill="none" stroke="#2C2C2C" stroke-width="2"></circle>
+        <circle cx="170" cy="170" r="114" fill="none" stroke="#2C2C2C" stroke-width="2"></circle>
+        <circle cx="170" cy="170" r="96" fill="none" stroke="#2C2C2C" stroke-width="2"></circle>
+        <circle cx="170" cy="170" r="54" fill="#F2B705"></circle>
+        <circle cx="170" cy="170" r="6" fill="#141414"></circle>
+        <path d="M120 150 A54 54 0 0 1 170 116" fill="none" stroke="#141414" stroke-width="2" opacity=".35"></path>
+      </svg>
+    </div>
+    <div class="deco deco-slam" aria-hidden="true">
+      <svg viewBox="0 0 300 260" preserveAspectRatio="xMidYMax meet">
+        <rect x="128" y="0" width="44" height="18" fill="#2A2A2A"></rect>
+        <g stroke="#F3F0E8" stroke-width="4" stroke-linecap="round" fill="none" opacity=".85">
+          <line x1="150" y1="150" x2="150" y2="252"></line>
+          <line x1="150" y1="252" x2="126" y2="258"></line>
+          <line x1="150" y1="252" x2="174" y2="258"></line>
+          <line x1="150" y1="152" x2="132" y2="134"></line>
+        </g>
+        <rect x="118" y="106" width="16" height="30" rx="8" transform="rotate(-45 126 121)" fill="#F3F0E8" opacity=".85"></rect>
+        <ellipse cx="150" cy="258" rx="90" ry="8" fill="#E8D9B0" opacity=".25"></ellipse>
+      </svg>
+    </div>
+    <div class="hero-main">
+      <div class="eyebrow" id="heroEyebrow">1re MCV · Les étapes de la vente</div>
+      <h1 id="heroTitle">Studio de la <em>vente</em></h1>
+      <p id="heroSub">Écris les neuf étapes de la vente en rap ou en slam. Ton texte est enregistré automatiquement sur cet appareil.</p>
+    </div>
+    <div class="top-side">
+      <div class="switch" role="group" aria-label="Choisis ta scène">
+        <span class="switch-lbl">Ma scène :</span>
+        <button type="button" class="sw rap" data-mode="rap" aria-pressed="false">Rap</button>
+        <button type="button" class="sw slam" data-mode="slam" aria-pressed="false">Slam</button>
+      </div>
+      <div class="save-state" id="saveState" aria-live="polite">Brouillon local</div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="nav" aria-label="Étapes">
+      <div class="progress">
+        <div class="lbl"><span>Progression</span><b id="progTxt">0 / 9</b></div>
+        <div class="bar" role="progressbar" aria-label="Étapes écrites" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0" id="progBar"><i id="progFill"></i></div>
+      </div>
+      <div class="savebox">
+        <span class="lab">Ma sauvegarde</span>
+        <span class="hint">En fin de séance, sauvegarde ton travail. La prochaine fois, reprends-le à partir du fichier.</span>
+        <button type="button" class="btn sm primary" data-save>Sauvegarder mon travail</button>
+        <label class="btn sm" for="loadFile">Reprendre mon travail</label>
+        <input type="file" id="loadFile" accept=".json,application/json" class="vh">
+        <div class="savemsg" id="saveMsg" role="status"></div>
+      </div>
+      <ul class="steps" id="stepList"></ul>
+    </nav>
+    <main class="panel" id="panel" aria-live="polite"></main>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Content ---------- */
+var STEPS = [
+  {id:"contact", name:"Prise de contact", role:"Accueillir le client et créer un climat de confiance dès les premières secondes.",
+   words:[["sourire","sourir"],["bonjour","bonjour"],["regard","regard"],["disponibilité","disponib"],["accueil","accueil"],["politesse","polite"]],
+   stage:"Regarde le public, souris, voix chaleureuse."},
+  {id:"besoins", name:"Découverte des besoins", role:"Poser des questions et écouter pour comprendre ce que le client cherche vraiment.",
+   words:[["question","question"],["écoute","ecout"],["besoin","besoin"],["motivation","motiv"],["SONCAS","soncas"],["attente","attente"]],
+   stage:"Pose de vraies questions au public et laisse un silence."},
+  {id:"reformulation", name:"Reformulation", role:"Résumer ce que le client a dit pour vérifier qu’on l’a bien compris.",
+   words:[["« si je comprends bien »","comprends bien"],["reformuler","reformul"],["résumer","resum"],["vérifier","verifi"],["valider","valid"],["confiance","confian"]],
+   stage:"Ralentis, ton posé, comme une confirmation."},
+  {id:"presentation", name:"Présentation du produit", role:"Montrer le produit adapté au besoin et le faire manipuler.",
+   words:[["produit","produit"],["caractéristique","caracteristi"],["montrer","montr"],["essayer","essa"],["toucher","touch"],["démonstration","demonstr"]],
+   stage:"Un geste de la main, comme si tu tenais le produit."},
+  {id:"argumentation", name:"Argumentation", role:"Transformer les caractéristiques en avantages pour ce client, avec une preuve.",
+   words:[["argument","argument"],["avantage","avantage"],["preuve","preuve"],["bénéfice","benefic"],["qualité","qualit"],["garantie","garanti"]],
+   stage:"Monte en énergie, appuie sur les mots-clés."},
+  {id:"objections", name:"Traitement des objections", role:"Écouter les freins du client, les reformuler et y répondre calmement.",
+   words:[["objection","objection"],["« oui, mais »","oui mais"],["rassurer","rassur"],["prix","prix"],["écouter","ecout"],["reformuler","reformul"]],
+   stage:"Reste calme, voix douce, ne coupe jamais la parole."},
+  {id:"conclusion", name:"Conclusion de la vente", role:"Repérer les signaux d’achat et aider le client à prendre sa décision.",
+   words:[["signal d’achat","signa"],["question alternative","alternativ"],["décision","deci"],["conclure","conclu"],["encaisser","encaiss"],["féliciter","felicit"]],
+   stage:"Ton assuré, phrases courtes, pas d’hésitation."},
+  {id:"additionnelle", name:"Vente additionnelle", role:"Proposer un produit ou un service complémentaire utile au client.",
+   words:[["complémentaire","complementaire"],["accessoire","accessoir"],["service","service"],["« avec ceci »","avec ceci"],["panier","panier"],["conseil","conseil"]],
+   stage:"Ton léger, comme un conseil entre amis."},
+  {id:"fidelisation", name:"Fidélisation", role:"Prendre congé et donner envie au client de revenir.",
+   words:[["fidélité","fidel"],["carte","carte"],["merci","merci"],["à bientôt","a bientot"],["après-vente","apres vente"],["revenir","reven"]],
+   stage:"Chaleur, merci sincère, termine sur un regard."}
+];
+
+var MODES = {
+  rap:{
+    label:"Rap", unit:"Piste", chorus:"Refrain", outro:"Message final",
+    groups:[["Face A",0,6],["Face B",6,9]],
+    titleLabel:"Titre de l’album", nameLabel:"Nom du groupe / d’artiste",
+    chorusHint:"2 à 4 lignes qui résument ta façon de vendre. Il revient entre chaque piste.",
+    outroHint:"Les derniers mots qu’on retient en sortant de ta boutique.",
+    stepHint:"4 à 6 lignes. Les rimes en fin de ligne donnent le rythme.",
+    exampleAt:"objections",
+    example:{title:"Piste 6 · « Trop cher ? Pas si vite ! »",
+      text:"« C’est trop cher ! » J’écoute, je reste serein,\nJe reformule ta crainte, je te montre le bien :\nÇa dure des années, le prix se divise avec le temps,\nUne objection levée, c’est un client confiant.",
+      why:"Vocabulaire pro (reformuler, objection), méthode écouter → reformuler → répondre, rimes en fin de ligne."}
+  },
+  slam:{
+    label:"Slam", unit:"Strophe", chorus:"Leitmotiv", outro:"La chute",
+    groups:[["Acte I · Accueillir",0,3],["Acte II · Convaincre",3,6],["Acte III · Conclure",6,9]],
+    titleLabel:"Titre du slam", nameLabel:"Nom de scène",
+    chorusHint:"1 ou 2 phrases sur ta vision du métier. Elles reviennent à la fin de chaque acte.",
+    outroHint:"Une fin qui marque. Puis silence.",
+    stepHint:"Pas d’obligation de rimer, mais le texte doit sonner. Utilise une figure de style.",
+    exampleAt:"contact",
+    example:{title:"Strophe 1 · Prise de contact (anaphore)",
+      text:"Bonjour, c’est un mot, mais c’est surtout un regard.\nBonjour, c’est un sourire qui dit : « Prenez votre temps. »\nBonjour, c’est la porte ouverte avant même le comptoir,\nBonjour… et le client sait déjà qu’il est important.",
+      why:"Le mot « Bonjour » répété en début de vers (anaphore) et le vocabulaire de l’accueil : regard, sourire."}
+  }
+};
+var FIGURES = ["Anaphore","Rime","Comparaison","Allitération","Métaphore","Répétition","Question rhétorique"];
+var TOOLS = [
+  ["Anaphore","Répéter un mot au début de plusieurs vers.","« J’écoute ton besoin, j’écoute ton silence… »"],
+  ["Rime","Le même son à la fin de deux vers.","« Je cherche ton besoin / J’en prends grand soin. »"],
+  ["Comparaison","Rapprocher deux idées avec « comme ».","« Un bon conseil, c’est comme une boussole. »"],
+  ["Allitération","Répéter un même son de consonne.","« Pour présenter le produit parfait… »"]
+];
+
+/* ---------- State ---------- */
+var KEY = "studio-vente-v1";
+var blank = function(){ return {mode:null, info:{name:"",people:"",classe:"",shop:"",title:""}, steps:{}, chorus:"", outro:"", manual:{clear:false, ready:false}, view:"start"}; };
+var S = blank();
+try{ var raw = localStorage.getItem(KEY); if(raw){ var p = JSON.parse(raw); if(p && typeof p==="object"){ S = Object.assign(blank(), p); S.info = Object.assign(blank().info, p.info||{}); S.manual = Object.assign(blank().manual, p.manual||{}); } } }catch(e){}
+STEPS.forEach(function(s){ if(!S.steps[s.id]) S.steps[s.id] = {text:"", title:"", figure:""}; });
+
+var saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){
+    var el = document.getElementById("saveState");
+    try{ localStorage.setItem(KEY, JSON.stringify(S)); el.textContent = "Enregistré sur cet appareil · " + new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}); }
+    catch(e){ el.textContent = "Pas d’enregistrement automatique ici : pense à télécharger ton texte."; }
+  }, 350);
+}
+
+/* ---------- Helpers ---------- */
+function norm(t){ return (" "+String(t||"")+" ").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," "); }
+function usedWords(step){ var n = norm(S.steps[step.id].text); return step.words.filter(function(w){ return n.indexOf(norm(w[1]).trim())>-1; }); }
+function lineCount(t){ return String(t||"").split("\n").filter(function(l){return l.trim();}).length; }
+function status(step){ var t = S.steps[step.id].text.trim(); if(!t) return "todo"; return (lineCount(t)>=2 && usedWords(step).length>=1) ? "done" : "part"; }
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];}); }
+function M(){ return MODES[S.mode||"rap"]; }
+function stepIndex(id){ for(var i=0;i<STEPS.length;i++) if(STEPS[i].id===id) return i; return -1; }
+function order(){ return ["start"].concat(STEPS.map(function(s){return s.id;}), ["chorus","final"]); }
+var ICON_CK = '<svg class="ck" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var ICON_PLUS = '<svg class="plus" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+var ICON_L = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var ICON_R = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 4l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* ---------- Sidebar ---------- */
+function renderNav(){
+  document.body.className = S.mode ? "mode-"+S.mode : "";
+  document.querySelectorAll(".sw").forEach(function(b){ b.setAttribute("aria-pressed", String(S.mode===b.dataset.mode)); });
+  var HERO = {
+    none:["1re MCV · Les étapes de la vente","Studio de la <em>vente</em>","Écris les neuf étapes de la vente en rap ou en slam. Ton texte est enregistré automatiquement sur cet appareil."],
+    rap:["1re MCV · Studio d’enregistrement","Studio de la <em>vente</em>","Enregistre l’album de ta boutique : 9 pistes, 1 refrain, 0 fausse note."],
+    slam:["1re MCV · Scène ouverte","La vente <em>sur scène</em>","Pas de musique, pas de décor. Juste ta voix, tes mots… et un client à convaincre."]
+  }[S.mode||"none"];
+  document.getElementById("heroEyebrow").textContent = HERO[0];
+  document.getElementById("heroTitle").innerHTML = HERO[1];
+  document.getElementById("heroSub").textContent = HERO[2];
+  var ul = document.getElementById("stepList"), h = "", m = M(), locked = !S.mode;
+  h += navItem("start", S.mode ? "✓" : "0", "Ton projet", S.mode ? "done":"todo", false);
+  m.groups.forEach(function(g){
+    h += '<li class="grp" aria-hidden="true">'+esc(g[0])+'</li>';
+    for(var i=g[1]; i<g[2]; i++){ var s = STEPS[i]; h += navItem(s.id, String(i+1), s.name, status(s), locked); }
+  });
+  h += '<li class="grp" aria-hidden="true">Pour finir</li>';
+  h += navItem("chorus", "♪", m.chorus+" & "+m.outro.toLowerCase(), S.chorus.trim() ? (S.outro.trim()?"done":"part") : "todo", locked);
+  h += navItem("final", "✔", "Vérifier & récupérer", "todo", locked);
+  ul.innerHTML = h;
+  var done = STEPS.filter(function(s){return status(s)==="done";}).length;
+  document.getElementById("progTxt").textContent = done+" / 9";
+  document.getElementById("progFill").style.width = (done/9*100)+"%";
+  document.getElementById("progBar").setAttribute("aria-valuenow", done);
+}
+function navItem(id, num, name, st, locked){
+  var cls = st==="done" ? "dot done" : st==="part" ? "dot part" : "dot";
+  var mark = st==="done" && id!=="start" && id!=="final" ? "✓" : num;
+  return '<li><button type="button" data-go="'+id+'"'+(S.view===id?' aria-current="step"':'')+(locked?' disabled':'')+'><span class="'+cls+'" aria-hidden="true">'+esc(mark)+'</span><span class="name">'+esc(name)+'</span></button></li>';
+}
+
+/* ---------- Panels ---------- */
+function render(){
+  renderNav();
+  var p = document.getElementById("panel");
+  if(S.view==="start" || !S.mode) p.innerHTML = startPanel();
+  else if(S.view==="chorus") p.innerHTML = chorusPanel();
+  else if(S.view==="final") p.innerHTML = finalPanel();
+  else p.innerHTML = stepPanel(STEPS[stepIndex(S.view)]);
+  if(S.view==="final") refreshFinal();
+}
+
+function startPanel(){
+  var m = M(), i = S.info;
+  return '<div class="panel-head"><span class="tag">Étape de départ</span><h2>Choisis ta scène</h2><p class="role">Rap ou slam : les neuf étapes de la vente restent les mêmes, seule la façon de les dire change.</p></div>'+
+  '<div class="resume"><span><b>Tu as déjà commencé ?</b> Reprends ton travail à partir de ton fichier de sauvegarde.</span><label class="btn sm" for="loadFile">Reprendre mon travail</label></div>'+
+  '<div class="choices">'+
+    '<button type="button" class="choice rap" data-mode="rap" aria-pressed="'+(S.mode==="rap")+'">'+
+      '<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="11" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".6"/><circle cx="20" cy="20" r="5" fill="currentColor"/></svg>'+
+      '<h3>Rap · l’album de ta boutique</h3><p>Chaque étape devient une piste avec son titre. Un refrain revient entre les pistes.</p><span class="meta">9 pistes · 1 refrain · 1 message final</span><span class="pick">'+(S.mode==="rap"?"✓ Rap choisi":"Je choisis le rap")+'</span></button>'+
+    '<button type="button" class="choice slam" data-mode="slam" aria-pressed="'+(S.mode==="slam")+'">'+
+      '<svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><path d="M14 4h12l8 32H6z" fill="currentColor" opacity=".18"/><rect x="17" y="18" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 29v6M15 36h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'+
+      '<h3>Slam · scène ouverte</h3><p>Chaque étape devient une strophe, avec une figure de style et un conseil pour la dire.</p><span class="meta">9 strophes · 3 actes · 1 leitmotiv</span><span class="pick">'+(S.mode==="slam"?"✓ Slam choisi":"Je choisis le slam")+'</span></button>'+
+  '</div>'+
+  '<div class="grid2">'+
+    fieldText("i-name", S.mode ? m.nameLabel : "Nom du groupe / de scène", i.name, "name")+
+    fieldText("i-people", "Prénoms", i.people, "people")+
+    fieldText("i-classe", "Classe", i.classe, "classe")+
+    fieldText("i-shop", "Ta boutique et ce que tu y vends", i.shop, "shop", "Ex. : un magasin de sport, des chaussures de running")+
+    '<div class="field full">'+fieldInner("i-title", S.mode ? m.titleLabel : "Titre de ton texte", i.title, "title")+'</div>'+
+  '</div>'+
+  '<div class="actions"><span class="hint" style="align-self:center">'+(S.mode?'Tu pourras changer de scène à tout moment : ton texte est conservé.':'Choisis d’abord rap ou slam pour commencer.')+'</span>'+
+  '<button type="button" class="btn primary" data-go="'+STEPS[0].id+'"'+(S.mode?'':' disabled')+'>Commencer l’étape 1 '+ICON_R+'</button></div>';
+}
+function fieldText(id,label,val,key,ph){ return '<div class="field">'+fieldInner(id,label,val,key,ph)+'</div>'; }
+function fieldInner(id,label,val,key,ph){ return '<label for="'+id+'">'+esc(label)+'</label><input type="text" id="'+id+'" data-info="'+key+'" value="'+esc(val)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+' autocomplete="off">'; }
+
+function stepPanel(step){
+  var m = M(), idx = stepIndex(step.id), d = S.steps[step.id], used = usedWords(step).map(function(w){return w[0];});
+  var grp = m.groups.filter(function(g){return idx>=g[1] && idx<g[2];})[0][0];
+  var h = '<div class="panel-head"><span class="tag">'+esc(m.unit)+' '+(idx+1)+' · '+esc(grp)+'</span><h2>'+esc(step.name)+'</h2><p class="role">'+esc(step.role)+'</p></div>';
+  if(S.mode==="rap"){
+    h += '<div class="field"><label for="s-title">Titre de la piste <span class="hint">· il doit faire penser à l’étape</span></label><input type="text" id="s-title" data-step-title value="'+esc(d.title)+'" autocomplete="off"></div>';
+  }
+  h += '<div class="kw"><span class="lab">Vocabulaire pro <span class="hint">· touche un mot pour l’ajouter à ton texte</span></span><div class="chips" id="chips">'+
+    step.words.map(function(w,k){ var u = used.indexOf(w[0])>-1; return '<button type="button" class="chip'+(u?' used':'')+'" data-word="'+k+'" aria-pressed="'+u+'">'+ICON_PLUS+ICON_CK+esc(w[0])+'</button>'; }).join("")+'</div></div>';
+  h += '<div class="field"><label for="s-text">Ta '+(S.mode==="rap"?"piste":"strophe")+' <span class="hint">· '+esc(m.stepHint)+'</span></label><textarea id="s-text" class="lyrics" data-step-text rows="7" spellcheck="true">'+esc(d.text)+'</textarea>'+
+    '<div class="counter"><span id="cLines">'+lineCount(d.text)+' ligne(s)</span><span id="cWords">'+used.length+' mot(s) pro</span></div></div>';
+  if(S.mode==="slam"){
+    h += '<div class="field"><label for="s-fig">Figure de style utilisée</label><select id="s-fig" data-step-fig><option value="">Choisir…</option>'+
+      FIGURES.map(function(f){return '<option'+(d.figure===f?' selected':'')+'>'+esc(f)+'</option>';}).join("")+'</select></div>';
+  }
+  var cards = '';
+  if(S.mode==="slam") cards += '<div class="note"><span class="eyebrow">Sur scène</span><span>'+esc(step.stage)+'</span></div>';
+  if(S.mode==="slam") cards += '<div class="note"><details class="tools"><summary>Boîte à outils du slameur</summary><div class="tools-grid">'+TOOLS.map(function(t){return '<div><b>'+esc(t[0])+'</b>'+esc(t[1])+'<br><i>'+esc(t[2])+'</i></div>';}).join("")+'</div></details></div>';
+  if(S.mode==="rap") cards += '<div class="note"><span class="eyebrow">Astuce</span><span>Lis ton texte à voix haute en tapant le rythme : si tu butes sur un mot, raccourcis la ligne.</span></div>';
+  if(S.mode==="rap") cards += '<div class="note"><span class="eyebrow">Après cette piste</span><span>♪ Le refrain revient. Tu l’écriras à la fin.</span></div>';
+  h += '<div class="cards">'+cards+'</div>';
+  if(m.exampleAt===step.id){
+    h += '<div class="example"><span class="eyebrow">Exemple · '+esc(m.example.title)+'</span><blockquote>'+esc(m.example.text)+'</blockquote><span class="why">'+esc(m.example.why)+'</span></div>';
+  } else {
+    var ex = STEPS[stepIndex(m.exampleAt)];
+    h += '<p class="hint" style="margin:0">Besoin d’un modèle ? Regarde l’exemple dans l’étape « '+esc(ex.name)+' ».</p>';
+  }
+  h += navButtons(step.id);
+  return h;
+}
+
+function chorusPanel(){
+  var m = M();
+  return '<div class="panel-head"><span class="tag">Pour finir</span><h2>'+esc(m.chorus)+' & '+esc(m.outro.toLowerCase())+'</h2><p class="role">'+(S.mode==="rap"?"Le refrain est le tube de ton album : c’est lui que la classe doit retenir.":"Le leitmotiv relie les trois actes. La chute laisse le public sur une image forte.")+'</p></div>'+
+  '<div class="field"><label for="c-chorus">'+esc(m.chorus)+' <span class="hint">· '+esc(m.chorusHint)+'</span></label><textarea id="c-chorus" class="lyrics" data-chorus rows="5">'+esc(S.chorus)+'</textarea></div>'+
+  '<div class="field"><label for="c-outro">'+esc(m.outro)+' <span class="hint">· '+esc(m.outroHint)+'</span></label><textarea id="c-outro" class="lyrics" data-outro rows="4">'+esc(S.outro)+'</textarea></div>'+
+  navButtons("chorus");
+}
+
+function finalPanel(){
+  var m = M();
+  return '<div class="panel-head"><span class="tag">Dernière étape</span><h2>'+(S.mode==="rap"?"Prêt pour le pressage ?":"Prêt à monter sur scène ?")+'</h2><p class="role">Vérifie ton texte, puis récupère-le pour l’imprimer ou le rendre à ton professeur.</p></div>'+
+  '<div class="checks" id="checks"></div>'+
+  '<div class="field"><span class="lab">Ton texte complet</span><div class="preview" tabindex="0" aria-label="Aperçu du texte complet"><pre id="fullText"></pre></div></div>'+
+  '<div style="display:flex; flex-wrap:wrap; gap:10px">'+
+    '<button type="button" class="btn primary" data-dl="html">Télécharger la version à imprimer</button>'+
+    '<button type="button" class="btn" data-dl="txt">Télécharger en texte (.txt)</button>'+
+    '<button type="button" class="btn ghost" data-copy>Copier le texte</button>'+
+  '</div><div class="toast" id="toast" role="status"></div>'+
+  '<div id="resetZone"><button type="button" class="btn ghost" data-reset>Recommencer un nouveau texte</button></div>'+
+  navButtons("final");
+}
+
+function navButtons(id){
+  var o = order(), i = o.indexOf(id), prev = o[i-1], next = o[i+1];
+  var lbl = function(v){ if(v==="start") return "Ton projet"; if(v==="chorus") return M().chorus; if(v==="final") return "Vérifier"; var k = stepIndex(v); return M().unit+" "+(k+1); };
+  return '<div class="actions">'+(prev?'<button type="button" class="btn ghost" data-go="'+prev+'">'+ICON_L+' '+esc(lbl(prev))+'</button>':'<span></span>')+
+    (next?'<button type="button" class="btn primary" data-go="'+next+'">'+esc(lbl(next))+' '+ICON_R+'</button>':'')+'</div>';
+}
+
+/* ---------- Final checks & export ---------- */
+function computeChecks(){
+  var filled = STEPS.filter(function(s){return S.steps[s.id].text.trim();}).length;
+  var vocab = STEPS.filter(function(s){return usedWords(s).length>=1;}).length;
+  var c = [
+    {ok: filled===9, t:"Les 9 étapes sont écrites", s: filled+" / 9 étapes"},
+    {ok: vocab===9, t:"Le vocabulaire pro est présent", s: vocab+" / 9 étapes avec au moins un mot pro"},
+    {ok: !!S.chorus.trim(), t:"Le "+M().chorus.toLowerCase()+" est écrit", s: S.chorus.trim()? lineCount(S.chorus)+" ligne(s)" : "À écrire"}
+  ];
+  if(S.mode==="rap"){ var tt = STEPS.filter(function(s){return S.steps[s.id].title.trim();}).length; c.push({ok: tt===9, t:"Chaque piste a un titre", s: tt+" / 9 titres"}); }
+  else { var ff = STEPS.filter(function(s){return S.steps[s.id].figure;}).length; c.push({ok: ff===9, t:"Une figure de style par strophe", s: ff+" / 9 figures"}); }
+  return c;
+}
+function refreshFinal(){
+  var box = document.getElementById("checks"); if(!box) return;
+  var h = computeChecks().map(function(c){ return '<div class="check '+(c.ok?'ok':'ko')+'"><span class="st" aria-hidden="true">'+(c.ok?'✓':'!')+'</span><span>'+esc(c.t)+'<small>'+esc(c.s)+'</small></span></div>'; }).join("");
+  h += '<label class="check" for="m-clear"><input type="checkbox" id="m-clear" data-manual="clear"'+(S.manual.clear?' checked':'')+'><span>Mon texte est clair et rythmé<small>Je l’ai lu à voix haute</small></span></label>';
+  h += '<label class="check" for="m-ready"><input type="checkbox" id="m-ready" data-manual="ready"'+(S.manual.ready?' checked':'')+'><span>'+(S.mode==="rap"?"Le groupe est prêt à présenter":"Je suis prêt(e) : regard, voix, silences")+'<small>À cocher avant le passage</small></span></label>';
+  box.innerHTML = h;
+  document.getElementById("fullText").textContent = composeText();
+}
+function composeText(){
+  var m = M(), i = S.info, L = [];
+  L.push((S.mode==="rap"?"ALBUM":"SLAM")+" : "+(i.title||"(sans titre)"));
+  L.push(m.nameLabel+" : "+(i.name||"—"));
+  L.push("Prénoms : "+(i.people||"—")+"   ·   Classe : "+(i.classe||"—"));
+  if(i.shop) L.push("Boutique : "+i.shop);
+  L.push("");
+  if(S.mode==="rap"){
+    L.push("♪ REFRAIN"); L.push(S.chorus.trim()||"(à écrire)"); L.push("");
+    m.groups.forEach(function(g){
+      L.push("—— "+g[0].toUpperCase()+" ——"); L.push("");
+      for(var k=g[1];k<g[2];k++){ var s=STEPS[k], d=S.steps[s.id];
+        L.push("PISTE "+(k+1)+" · "+s.name+(d.title.trim()?" — « "+d.title.trim()+" »":""));
+        L.push(d.text.trim()||"(à écrire)"); L.push("♪ Refrain"); L.push(""); }
+    });
+  } else {
+    m.groups.forEach(function(g){
+      L.push("—— "+g[0].toUpperCase()+" ——"); L.push("");
+      for(var k=g[1];k<g[2];k++){ var s=STEPS[k], d=S.steps[s.id];
+        L.push("STROPHE "+(k+1)+" · "+s.name+(d.figure?"  [figure : "+d.figure.toLowerCase()+"]":""));
+        L.push(d.text.trim()||"(à écrire)"); L.push(""); }
+      L.push("LEITMOTIV"); L.push(S.chorus.trim()||"(à écrire)"); L.push("");
+    });
+  }
+  L.push(m.outro.toUpperCase()); L.push(S.outro.trim()||"(à écrire)");
+  return L.join("\n");
+}
+function printableHTML(){
+  var m = M(), i = S.info, accent = S.mode==="rap" ? "#8A6400" : "#111111", b = "";
+  function block(head, sub, text){ return '<section><h3>'+esc(head)+(sub?' <span>'+esc(sub)+'</span>':'')+'</h3><p>'+esc(text||"(à écrire)").replace(/\n/g,"<br>")+'</p></section>'; }
+  if(S.mode==="rap") b += block("Refrain","",S.chorus.trim());
+  m.groups.forEach(function(g){
+    b += '<h2>'+esc(g[0])+'</h2>';
+    for(var k=g[1];k<g[2];k++){ var s=STEPS[k], d=S.steps[s.id];
+      var sub = S.mode==="rap" ? (d.title.trim()?"« "+d.title.trim()+" »":"") : (d.figure?"Figure : "+d.figure.toLowerCase():"");
+      b += block(m.unit+" "+(k+1)+" · "+s.name, sub, d.text.trim()); }
+    if(S.mode==="slam") b += block("Leitmotiv","",S.chorus.trim());
+  });
+  b += block(m.outro,"",S.outro.trim());
+  var checks = computeChecks().map(function(c){return '<li>'+(c.ok?'☑':'☐')+' '+esc(c.t)+'</li>';}).join("")+
+    '<li>'+(S.manual.clear?'☑':'☐')+' Texte clair et rythmé</li><li>'+(S.manual.ready?'☑':'☐')+' Prêt à présenter</li>';
+  return '<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>'+esc(i.title||"Mon texte")+'</title><style>'+
+   'body{font-family:Georgia,"Times New Roman",serif;color:#1a1f1d;max-width:720px;margin:32px auto;padding:0 24px;line-height:1.6}'+
+   'header{border-bottom:3px solid '+accent+';padding-bottom:12px;margin-bottom:8px}h1{font-family:Arial,sans-serif;margin:4px 0;font-size:30px}'+
+   '.k{font-family:Arial,sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:'+accent+'}'+
+   '.id{font-family:Arial,sans-serif;font-size:14px;color:#444}h2{font-family:Arial,sans-serif;font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:'+accent+';border-bottom:1px solid #ccc;padding-bottom:4px;margin-top:28px}'+
+   'section{break-inside:avoid;margin:14px 0}h3{font-family:Arial,sans-serif;font-size:16px;margin:0 0 4px}h3 span{font-weight:400;color:#555}p{margin:0;white-space:normal}'+
+   'ul{list-style:none;padding:0;font-family:Arial,sans-serif;font-size:14px}footer{margin-top:28px;border-top:1px solid #ccc;padding-top:10px}'+
+   '@media print{body{margin:0 auto}}</style></head><body><header><div class="k">1re MCV · Les étapes de la vente · '+esc(m.label)+'</div><h1>'+esc(i.title||"Mon texte")+'</h1>'+
+   '<div class="id">'+esc(m.nameLabel)+' : '+esc(i.name||"—")+' · Prénoms : '+esc(i.people||"—")+' · Classe : '+esc(i.classe||"—")+(i.shop?' · Boutique : '+esc(i.shop):'')+'</div></header>'+b+
+   '<footer><div class="k">Check final</div><ul>'+checks+'</ul></footer></body></html>';
+}
+function slug(){ return (norm(S.info.title||S.info.name||"mon-texte").trim().replace(/ /g,"-").slice(0,40) || "mon-texte") + "-" + S.mode; }
+
+var dlCap = null;
+if(window.claude && window.claude.use){ window.claude.use("downloads").then(function(d){ dlCap = d; }).catch(function(){}); }
+function toast(msg, err){ var t = document.getElementById("toast"); if(t){ t.textContent = msg; t.className = "toast"+(err?" err":""); } }
+function download(kind){
+  var data = kind==="html" ? printableHTML() : composeText();
+  var filename = slug()+"."+kind;
+  if(dlCap){
+    dlCap.save({filename:filename, data:data}).then(function(){
+      toast(kind==="html" ? "Fichier enregistré. Ouvre-le puis imprime-le depuis ton navigateur." : "Fichier enregistré.");
+    }).catch(function(e){
+      var c = e && e.code;
+      if(c==="declined") toast("Téléchargement annulé.", true);
+      else if(c==="rate_limited") toast("Une demande est déjà ouverte. Réessaie dans un instant.", true);
+      else toast("Le téléchargement n’est pas disponible ici. Utilise « Copier le texte ».", true);
+    });
+    return;
+  }
+  try{
+    var blob = new Blob([data], {type: kind==="html" ? "text/html" : "text/plain"});
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    toast("Téléchargement lancé.");
+  }catch(e){ toast("Le téléchargement n’est pas disponible ici. Utilise « Copier le texte ».", true); }
+}
+function copyText(){
+  var txt = composeText();
+  var fallback = function(){
+    var pre = document.getElementById("fullText"); if(!pre) return;
+    var r = document.createRange(); r.selectNodeContents(pre); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    toast("Texte sélectionné : fais Ctrl + C (ou Copier) pour le copier.");
+  };
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){ toast("Texte copié. Colle-le dans un document ou un message."); }, fallback); }
+    else fallback();
+  }catch(e){ fallback(); }
+}
+
+/* ---------- Save / resume (file) ---------- */
+function saveMsg(msg, err){ var m = document.getElementById("saveMsg"); m.textContent = msg; m.className = "savemsg"+(err?" err":""); }
+function saveWork(){
+  var d = new Date(), pad = function(n){ return (n<10?"0":"")+n; };
+  var who = norm(S.info.people || S.info.name || "eleve").trim().replace(/ /g,"-").slice(0,30) || "eleve";
+  var filename = "sauvegarde-vente-"+who+"-"+pad(d.getDate())+"-"+pad(d.getMonth()+1)+".json";
+  var data = JSON.stringify({app:"studio-vente", v:1, savedAt:d.toISOString(), data:S}, null, 1);
+  var ok = "Sauvegarde prête : garde le fichier « "+filename+" » (clé USB, ENT, mail…).";
+  if(dlCap){
+    dlCap.save({filename:filename, data:data}).then(function(){ saveMsg(ok); }).catch(function(e){
+      var c = e && e.code;
+      if(c==="declined") saveMsg("Sauvegarde annulée.", true);
+      else if(c==="rate_limited") saveMsg("Une demande est déjà ouverte. Réessaie dans un instant.", true);
+      else saveMsg("La sauvegarde n’est pas disponible ici. Utilise « Copier le texte » à la dernière étape.", true);
+    });
+    return;
+  }
+  try{
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([data],{type:"application/json"})); a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove(); saveMsg(ok);
+  }catch(e){ saveMsg("La sauvegarde n’est pas disponible ici. Utilise « Copier le texte » à la dernière étape.", true); }
+}
+document.getElementById("loadFile").addEventListener("change", function(e){
+  var f = e.target.files && e.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(){
+    try{
+      var o = JSON.parse(r.result);
+      if(!o || o.app!=="studio-vente" || !o.data) throw new Error("bad");
+      var p = o.data, n = blank();
+      n.mode = (p.mode==="rap"||p.mode==="slam") ? p.mode : null;
+      n.info = Object.assign(n.info, p.info||{});
+      n.chorus = String(p.chorus||""); n.outro = String(p.outro||"");
+      n.manual = Object.assign(n.manual, p.manual||{});
+      STEPS.forEach(function(s){ var q = (p.steps||{})[s.id]||{}; n.steps[s.id] = {text:String(q.text||""), title:String(q.title||""), figure:String(q.figure||"")}; });
+      var firstEmpty = STEPS.filter(function(s){ return !n.steps[s.id].text.trim(); })[0];
+      n.view = !n.mode ? "start" : (firstEmpty ? firstEmpty.id : "chorus");
+      S = n; save(); render();
+      var when = o.savedAt ? new Date(o.savedAt).toLocaleDateString("fr-FR",{day:"numeric",month:"long"}) : "";
+      saveMsg("Travail repris"+(when?" (sauvegarde du "+when+")":"")+". Tu reprends là où tu t’étais arrêté(e).");
+    }catch(err){ saveMsg("Ce fichier n’est pas une sauvegarde du Studio de la vente. Choisis le fichier « sauvegarde-vente-… .json ».", true); }
+    e.target.value = "";
+  };
+  r.onerror = function(){ saveMsg("Impossible de lire ce fichier. Réessaie.", true); e.target.value = ""; };
+  r.readAsText(f);
+});
+
+/* ---------- Events ---------- */
+var app = document.getElementById("app");
+app.addEventListener("click", function(e){
+  var t = e.target.closest("button"); if(!t || t.disabled) return;
+  if(t.dataset.mode){ S.mode = t.dataset.mode; save(); render(); return; }
+  if(t.dataset.go){ S.view = t.dataset.go; save(); render(); var p = document.getElementById("panel"); if(p.getBoundingClientRect().top < 0) p.scrollIntoView({block:"start"}); var hd = p.querySelector("h2"); if(hd){ hd.setAttribute("tabindex","-1"); hd.focus({preventScroll:true}); } return; }
+  if(t.dataset.word !== undefined){
+    var step = STEPS[stepIndex(S.view)], w = step.words[+t.dataset.word][0].replace(/[«»]/g,"").trim(), ta = document.getElementById("s-text");
+    var st = ta.selectionStart != null ? ta.selectionStart : ta.value.length, en = ta.selectionEnd != null ? ta.selectionEnd : st;
+    var before = ta.value.slice(0,st), after = ta.value.slice(en);
+    var ins = (before && !/\s$/.test(before) ? " " : "") + w + (after && !/^\s/.test(after) ? " " : "");
+    ta.value = before + ins + after; ta.focus(); var pos = before.length + ins.length; ta.setSelectionRange(pos,pos);
+    ta.dispatchEvent(new Event("input",{bubbles:true})); return;
+  }
+  if(t.dataset.dl){ download(t.dataset.dl); return; }
+  if(t.hasAttribute("data-save")){ saveWork(); return; }
+  if(t.hasAttribute("data-copy")){ copyText(); return; }
+  if(t.hasAttribute("data-reset")){
+    document.getElementById("resetZone").innerHTML = '<div class="confirm"><span>Effacer tout ton texte sur cet appareil ? Pense à le télécharger avant.</span><button type="button" class="btn" data-reset-yes>Oui, tout effacer</button><button type="button" class="btn ghost" data-reset-no>Annuler</button></div>';
+    return;
+  }
+  if(t.hasAttribute("data-reset-no")){ render(); return; }
+  if(t.hasAttribute("data-reset-yes")){ S = blank(); STEPS.forEach(function(s){ S.steps[s.id] = {text:"",title:"",figure:""}; }); try{ localStorage.removeItem(KEY); }catch(e){} render(); return; }
+});
+app.addEventListener("input", function(e){
+  var t = e.target;
+  if(t.dataset.info){ S.info[t.dataset.info] = t.value; save(); return; }
+  if(t.hasAttribute("data-step-title")){ S.steps[S.view].title = t.value; save(); return; }
+  if(t.hasAttribute("data-step-text")){
+    S.steps[S.view].text = t.value; save();
+    var step = STEPS[stepIndex(S.view)], used = usedWords(step).map(function(w){return w[0];});
+    document.querySelectorAll("#chips .chip").forEach(function(c){ var u = used.indexOf(step.words[+c.dataset.word][0])>-1; c.classList.toggle("used",u); c.setAttribute("aria-pressed",u); });
+    document.getElementById("cLines").textContent = lineCount(t.value)+" ligne(s)";
+    document.getElementById("cWords").textContent = used.length+" mot(s) pro";
+    renderNav(); return;
+  }
+  if(t.hasAttribute("data-chorus")){ S.chorus = t.value; save(); renderNav(); return; }
+  if(t.hasAttribute("data-outro")){ S.outro = t.value; save(); renderNav(); return; }
+});
+app.addEventListener("change", function(e){
+  var t = e.target;
+  if(t.hasAttribute("data-step-fig")){ S.steps[S.view].figure = t.value; save(); return; }
+  if(t.dataset.manual){ S.manual[t.dataset.manual] = t.checked; save(); refreshFinal(); return; }
+});
+
+if(!S.mode) S.view = "start";
+render();
+})();
+</script>
